@@ -169,12 +169,48 @@ class ParamCardWriter(object):
         
         self.fsock.write(text)
         
+        def write_decay_table(self, decay_entries):
+        """Writes the decay table to the param card file according to the specific FORTRAN format"""
+    
+        for entry in decay_entries:
+          pdg_number = entry['pdg']
+          total_width = entry['width']
+          human_readable = entry.get('human_readable', '')
+        
+          # Write the DECAY line
+          decay_line = f"DECAY {pdg_number:<9} {total_width:16.8E} # {human_readable}\n"
+          self.fsock.write(decay_line)
+        
+          for channel in entry['channels']:
+            br = channel['br']
+            nda = channel['nda']
+            daughter_pdgs = channel['daughters']
+            human_readable_channel = channel.get('human_readable', '')
+            
+            # Write the decay channel line
+            channel_line = f"   {br:16.8E} {nda:<2} {' '.join(map(str, daughter_pdgs))}  # {human_readable_channel}\n"
+            self.fsock.write(channel_line)
+
         
             
             
             
             
-        
+decay_entries = [
+    {
+        'pdg': 1000021,
+        'width': 1.01752300e+00,
+        'human_readable': 'gluino decays',
+        'channels': [
+            {'br': 4.18313300e-02, 'nda': 2, 'daughters': [1000001, -1], 'human_readable': '~g -> ~d_L dbar'},
+            {'br': 1.55587600e-02, 'nda': 2, 'daughters': [2000001, -1], 'human_readable': '~g -> ~d_R dbar'}
+        ]
+    },
+    # Add more entries as needed
+]
+
+# Write the decay table to the file
+writer.write_decay_table(decay_entries)
             
 if '__main__' == __name__:
     ParamCardWriter('./param_card.dat', generic=True)
