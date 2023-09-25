@@ -169,8 +169,8 @@ class ParamCardWriter(object):
         
         self.fsock.write(text)
         
-        def write_decay_table(self, decay_entries):
-        """Writes the decay table to the param card file according to the specific FORTRAN format"""
+  def write_decay_table(self, decay_entries):
+  """Writes the decay table to the param card file according to the specific FORTRAN format"""
     
         for entry in decay_entries:
           pdg_number = entry['pdg']
