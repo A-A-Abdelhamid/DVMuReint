@@ -211,6 +211,7 @@ decay_entries = [
 
 # Write the decay table to the file
 writer.write_decay_table(decay_entries)
+self.fsock.write(decay_entries)
             
 if '__main__' == __name__:
     ParamCardWriter('./param_card.dat', generic=True)
